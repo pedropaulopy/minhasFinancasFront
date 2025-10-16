@@ -1,8 +1,10 @@
 import React from 'react'
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import withRouter from "react-router-dom/es/withRouter";
+import {Link} from "react-router"
 class CadastroUsuario extends React.Component{
+
+
     state = {
         nome: '',
         email: '',
@@ -17,7 +19,7 @@ class CadastroUsuario extends React.Component{
     };
 
     prepareLogin = () => {
-        this.props.history.push('/login');
+
     }
 
     render() {
@@ -54,7 +56,7 @@ class CadastroUsuario extends React.Component{
                                                         </FormGroup>
 
                                                         <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
-                                                            <input type={"senha"}
+                                                            <input type={"password"}
                                                                    value={this.state.senha}
                                                                    onChange={e => this.setState({senha : e.target.value})}
                                                                    className={"form-control"}
@@ -65,7 +67,7 @@ class CadastroUsuario extends React.Component{
                                                         </FormGroup>
 
                                                         <FormGroup Label={"Repita a senha: *"} htmlFor={"exampleInputPassword1"}>
-                                                            <input type={"senha"}
+                                                            <input type={"password"}
                                                                    value={this.state.senhaRepetida}
                                                                    onChange={e => this.setState({senhaRepetida : e.target.value})}
                                                                    className={"form-control"}
@@ -84,9 +86,8 @@ class CadastroUsuario extends React.Component{
                                                                 onClick={this.cadastrar}
                                                                 type="button" className="btn btn-success">Cadastrar
                                                         </button>
-                                                        <button onClick={this.prepareLogin}
-                                                                type="button" className="btn btn-danger">Cancelar
-                                                        </button>
+                                                        <Link to={"/login"} className="btn btn-danger">Cancelar
+                                                        </Link>
                                                     </fieldset>
                                                 </form>
                                             </div>
@@ -102,4 +103,4 @@ class CadastroUsuario extends React.Component{
     }
 }
 
-export default withRouter(CadastroUsuario);
+export default CadastroUsuario;

@@ -1,5 +1,8 @@
 {
   "name": "minhasfinancasapp",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "react-router": "^7.9.4"
+  }
 }

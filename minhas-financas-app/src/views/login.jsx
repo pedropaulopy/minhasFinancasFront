@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import withRouter from "react-router-dom/es/withRouter";
+import {Link} from "react-router";
 class Login extends React.Component{
     state = {
         email: '',
@@ -40,7 +40,7 @@ class Login extends React.Component{
                                                         </FormGroup>
 
                                                         <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
-                                                            <input type={"senha"}
+                                                            <input type={"password"}
                                                                    value={this.state.senha}
                                                                    onChange={e => this.setState({senha : e.target.value})}
                                                                    className={"form-control"}
@@ -52,9 +52,8 @@ class Login extends React.Component{
                                                         <button onClick={this.entrar} type="button"
                                                                 className="btn btn-success">Entrar
                                                         </button>
-                                                        <button onClick={this.prepareCadastrar}
-                                                                type="button" className="btn btn-danger">Cadastrar
-                                                        </button>
+                                                        <Link to={"/cadastro-usuarios"} className="btn btn-danger">Cadastrar
+                                                        </Link>
                                                     </fieldset>
                                                 </form>
                                             </div>
@@ -70,4 +69,4 @@ class Login extends React.Component{
     }
 }
 
-export default  withRouter(Login);
+export default Login;

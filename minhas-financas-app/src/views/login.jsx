@@ -1,79 +1,86 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import {Link} from "react-router";
+import { Link } from "react-router";
 import axios from "axios";
-class Login extends React.Component{
-    state = {
-        email: '',
-        senha: ''
-    }
 
-    entrar = () => {
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [mensagemErro, setMensagemErro] = useState(null);
+    const navigate = useNavigate();
+
+    const entrar = () => {
         axios.post('http://localhost:8081/api/usuarios/autenticar', {
-            email: this.state.email,
-            senha: this.state.senha
+            email: email,
+            senha: senha
         }).then(response => {
-            console.log(response)
+            navigate("/");
         }).catch(erro => {
-            console.log(erro.response)
-        })
+            let msg = 'Erro desconhecido. Tente novamente.';
+            if (erro.response && erro.response.data) {
+                msg = erro.response.data;
+            } else if (erro.message) {
+                msg = erro.message;
+            }
+            setMensagemErro(msg);
+        });
     };
 
-    prepareCadastrar = () => {
-        this.props.history.push('/cadastro-usuarios');
-    }
-    render() {
-        return(
-            <div className="container">
-                <div className={"row"}>
-                    <div className={"col-md-6"} style={{position:'relative', left:'300px'}}>
-                        <div className={"bs-docs-section"}>
-                            <Card title={"Login"}>
-                                <div className={"card-body"}>
-                                    <div className={"row"}>
-                                        <div className={"col-md-12"}>
-                                            <div className={"bs-component"}>
-                                                <form>
-                                                    <fieldset>
-                                                        <FormGroup Label={"Email: *"} htmlFor={"exampleInputEmail"}>
-                                                            <input type={"email"}
-                                                                   value={this.state.email}
-                                                                   onChange={e => this.setState({email : e.target.value})}
-                                                                   className={"form-control"}
-                                                                   id={"exampleInputEmail"}
-                                                                   aria-describedby={"emailHelp"}
-                                                                   placeholder={"Digite o Email"}/>
-                                                        </FormGroup>
-
-                                                        <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
-                                                            <input type={"password"}
-                                                                   value={this.state.senha}
-                                                                   onChange={e => this.setState({senha : e.target.value})}
-                                                                   className={"form-control"}
-                                                                   id={"exampleInputPassword1"}
-                                                                   aria-describedby={"passwordHelp"}
-                                                                   placeholder={"Digite a Senha"}
-                                                            />
-                                                        </FormGroup>
-                                                        <button onClick={this.entrar} type="button"
-                                                                className="btn btn-success">Entrar
-                                                        </button>
-                                                        <Link to={"/cadastro-usuarios"} className="btn btn-danger">Cadastrar
-                                                        </Link>
-                                                    </fieldset>
-                                                </form>
-                                            </div>
+    return (
+        <div className="container">
+            <div className={"row"}>
+                <div className={"col-md-6"} style={{position:'relative', left:'300px'}}>
+                    <div className={"bs-docs-section"}>
+                        <Card title={"Login"}>
+                            <div className={"row"}><span>{mensagemErro}</span></div>
+                            <div className={"card-body"}>
+                                <div className={"row"}>
+                                    <div className={"col-md-12"}>
+                                        <div className={"bs-component"}>
+                                            <form>
+                                                <fieldset>
+                                                    <FormGroup Label={"Email: *"} htmlFor={"exampleInputEmail"}>
+                                                        <input
+                                                            type={"email"}
+                                                            value={email}
+                                                            onChange={e => setEmail(e.target.value)}
+                                                            className={"form-control"}
+                                                            id={"exampleInputEmail"}
+                                                            aria-describedby={"emailHelp"}
+                                                            placeholder={"Digite o Email"}
+                                                        />
+                                                    </FormGroup>
+                                                    <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
+                                                        <input
+                                                            type={"password"}
+                                                            value={senha}
+                                                            onChange={e => setSenha(e.target.value)}
+                                                            className={"form-control"}
+                                                            id={"exampleInputPassword1"}
+                                                            aria-describedby={"passwordHelp"}
+                                                            placeholder={"Digite a Senha"}
+                                                        />
+                                                    </FormGroup>
+                                                    <button onClick={entrar} type="button" className="btn btn-success">
+                                                        Entrar
+                                                    </button>
+                                                    <Link to={"/cadastro-usuarios"} className="btn btn-danger">
+                                                        Cadastrar
+                                                    </Link>
+                                                </fieldset>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
-                        </div>
+                            </div>
+                        </Card>
                     </div>
                 </div>
             </div>
-        )
-    }
-}
+        </div>
+    );
+};
 
 export default Login;

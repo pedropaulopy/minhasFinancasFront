@@ -4,7 +4,7 @@ import Login from "../views/login";
 import CadastroUsuario from "../views/cadastroUsuario";
 import Home from "../views/home"
 
-import {Routes, Route} from "react-router"
+import {Routes, Route, BrowserRouter} from "react-router"
 
 function Rotas(){
         return(

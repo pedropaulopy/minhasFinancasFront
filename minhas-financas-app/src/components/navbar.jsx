@@ -16,17 +16,16 @@ function Navbar(){
                     <ul className="navbar-nav">
                         {/* 2. Change <a> to <Link> and href to "to" */}
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Home</Link>
+                            <Link className="nav-link" to="/home">Home</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/cadastro-usuarios">Usuários</Link>
                         </li>
                         <li className="nav-item">
-                            {/* This one also pointed to "/", changed it */}
                             <Link className="nav-link" to="/">Lançamentos</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/login">Login</Link>
+                            <Link className="nav-link" to="/">Login</Link>
                         </li>
                     </ul>
                 </div>

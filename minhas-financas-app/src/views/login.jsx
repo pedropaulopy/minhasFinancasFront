@@ -3,29 +3,29 @@ import { useNavigate } from 'react-router';
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import { Link } from "react-router";
-import axios from "axios";
+import usuarioService from "../app/services/usuarioService";
+import localStorageService from '../app/services/localStorageService'
+
+import {mensagemErro, mensagemSucesso} from '../components/toastr'
+
+const service = new usuarioService();
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [mensagemErro, setMensagemErro] = useState(null);
     const navigate = useNavigate();
 
+
     const entrar = () => {
-        axios.post('http://localhost:8081/api/usuarios/autenticar', {
+        service.autenticar( {
             email: email,
             senha: senha
         }).then(response => {
-            localStorage.setItem('_usuario_logado', JSON.stringify(response.data))
-            navigate("/");
+            localStorageService.adicionarItem('_usuario_logado', response.data)
+            mensagemSucesso("Credenciais corretas", "Usuario logado com sucesso!")
+            navigate("/home");
         }).catch(erro => {
-            let msg = 'Erro desconhecido. Tente novamente.';
-            if (erro.response && erro.response.data) {
-                msg = erro.response.data;
-            } else if (erro.message) {
-                msg = erro.message;
-            }
-            setMensagemErro(msg);
+            mensagemErro("Erro", erro.response.data);
         });
     };
 

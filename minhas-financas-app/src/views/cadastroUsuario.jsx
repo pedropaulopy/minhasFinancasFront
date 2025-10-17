@@ -1,109 +1,117 @@
-import React from 'react'
+import React, { useState } from 'react'; // Importa o useState
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import {Link} from "react-router"
+import { Link } from "react-router-dom"; // Corrigido de 'react-router' para 'react-router-dom'
 import axios from "axios";
-class CadastroUsuario extends React.Component{
 
+import { mensagemErro, mensagemSucesso } from '../components/toastr';
+import {useNavigate} from "react-router";
 
-    state = {
-        nome: '',
-        email: '',
-        senha: '',
-        senhaRepetida: ''
-    }
+function CadastroUsuario() {
 
-    cadastrar = () => {
+    // Substitui o this.state por hooks useState individuais
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [senhaRepetida, setSenhaRepetida] = useState('');
+    const navigate = useNavigate();
+
+    const cadastrar = () => {
         axios.post("http://localhost:8081/api/usuarios", {
-            email: this.state.email,
-            nome: this.state.nome,
-            senha: this.state.senhaRepetida
-        }).then(response => (
-            console.log(response)
-        )).catch(erro => (
-            console.log(erro.response)
-        ))
+            email: email,
+            nome: nome,
+            senha: senhaRepetida
+        }).then(response => {
+            mensagemSucesso("Sucesso", "Usuário cadastrado com sucesso!");
+            navigate("/home");
+        }).catch(erro => {
+            mensagemErro("Erro", erro.response.data);
+        });
     };
 
-    render() {
-        const senhasIguais = this.state.senha === this.state.senhaRepetida;
-        return(
-            <div className="container">
-                <div className={"row"}>
-                    <div className={"col-md-6"} style={{position:'relative', left:'300px'}}>
-                        <div className={"bs-docs-section"}>
-                            <Card title={"Cadastro de Usuario"}>
-                                <div className={"card-body"}>
-                                    <div className={"row"}>
-                                        <div className={"col-md-12"}>
-                                            <div className={"bs-component"}>
-                                                <form>
-                                                    <fieldset>
-                                                        <FormGroup Label={"Nome: *"} htmlFor={"inputNome"}>
-                                                            <input type={"text"}
-                                                                   value={this.state.nome}
-                                                                   onChange={e => this.setState({nome : e.target.value})}
-                                                                   className={"form-control"}
-                                                                   id={"inputNome"}
-                                                                   placeholder={"Digite o Email"}/>
-                                                        </FormGroup>
+    // Calcula a variável diretamente
+    const senhasIguais = senha === senhaRepetida;
 
-                                                        <FormGroup Label={"Email: *"} htmlFor={"exampleInputEmail"}>
-                                                            <input type={"email"}
-                                                                   value={this.state.email}
-                                                                   onChange={e => this.setState({email : e.target.value})}
-                                                                   className={"form-control"}
-                                                                   id={"exampleInputEmail"}
-                                                                   aria-describedby={"emailHelp"}
-                                                                   placeholder={"Digite o Email"}/>
-                                                        </FormGroup>
+    return (
+        <div className="container">
+            <div className={"row"}>
+                <div className={"col-md-6"} style={{ position: 'relative', left: '300px' }}>
+                    <div className={"bs-docs-section"}>
+                        <Card title={"Cadastro de Usuario"}>
+                            <div className={"card-body"}>
+                                <div className={"row"}>
+                                    <div className={"col-md-12"}>
+                                        <div className={"bs-component"}>
+                                            <form>
+                                                <fieldset>
+                                                    <FormGroup Label={"Nome: *"} htmlFor={"inputNome"}>
+                                                        <input type={"text"}
+                                                               value={nome} // Usa a variável de estado
+                                                               onChange={e => setNome(e.target.value)} // Usa a função setter
+                                                               className={"form-control"}
+                                                               id={"inputNome"}
+                                                               placeholder={"Digite o Nome"} />
+                                                        {/* Placeholder corrigido de 'Email' para 'Nome' */}
+                                                    </FormGroup>
 
-                                                        <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
-                                                            <input type={"password"}
-                                                                   value={this.state.senha}
-                                                                   onChange={e => this.setState({senha : e.target.value})}
-                                                                   className={"form-control"}
-                                                                   id={"exampleInputPassword1"}
-                                                                   aria-describedby={"passwordHelp"}
-                                                                   placeholder={"Digite a Senha"}
-                                                            />
-                                                        </FormGroup>
+                                                    <FormGroup Label={"Email: *"} htmlFor={"exampleInputEmail"}>
+                                                        <input type={"email"}
+                                                               value={email} // Usa a variável de estado
+                                                               onChange={e => setEmail(e.target.value)} // Usa a função setter
+                                                               className={"form-control"}
+                                                               id={"exampleInputEmail"}
+                                                               aria-describedby={"emailHelp"}
+                                                               placeholder={"Digite o Email"} />
+                                                    </FormGroup>
 
-                                                        <FormGroup Label={"Repita a senha: *"} htmlFor={"exampleInputPassword1"}>
-                                                            <input type={"password"}
-                                                                   value={this.state.senhaRepetida}
-                                                                   onChange={e => this.setState({senhaRepetida : e.target.value})}
-                                                                   className={"form-control"}
-                                                                   id={"exampleInputPassword1"}
-                                                                   aria-describedby={"passwordHelp"}
-                                                                   placeholder={"Repita a Senha"}
-                                                            />
-                                                            {this.state.senha && this.state.senhaRepetida && this.state.senha !== this.state.senhaRepetida && (
-                                                                <small style={{ color: 'red' }}>
-                                                                    As senhas não coincidem.
-                                                                </small>
-                                                            )}
-                                                        </FormGroup>
+                                                    <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
+                                                        <input type={"password"}
+                                                               value={senha} // Usa a variável de estado
+                                                               onChange={e => setSenha(e.target.value)} // Usa a função setter
+                                                               className={"form-control"}
+                                                               id={"exampleInputPassword1"}
+                                                               aria-describedby={"passwordHelp"}
+                                                               placeholder={"Digite a Senha"}
+                                                        />
+                                                    </FormGroup>
 
-                                                        <button disabled={!senhasIguais}
-                                                                onClick={this.cadastrar}
-                                                                type="button" className="btn btn-success">Cadastrar
-                                                        </button>
-                                                        <Link to={"/login"} className="btn btn-danger">Cancelar
-                                                        </Link>
-                                                    </fieldset>
-                                                </form>
-                                            </div>
+                                                    <FormGroup Label={"Repita a senha: *"} htmlFor={"exampleInputPassword2"}>
+                                                        {/* ID corrigido para ser único */}
+                                                        <input type={"password"}
+                                                               value={senhaRepetida} // Usa a variável de estado
+                                                               onChange={e => setSenhaRepetida(e.target.value)} // Usa a função setter
+                                                               className={"form-control"}
+                                                               id={"exampleInputPassword2"}
+                                                               aria-describedby={"passwordHelp"}
+                                                               placeholder={"Repita a Senha"}
+                                                        />
+                                                        {/* Condicional usa as variáveis de estado */}
+                                                        {senha && senhaRepetida && senha !== senhaRepetida && (
+                                                            <small style={{ color: 'red' }}>
+                                                                As senhas não coincidem.
+                                                            </small>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <button disabled={!senhasIguais}
+                                                            onClick={cadastrar} // Chama a função sem o 'this'
+                                                            type="button" className="btn btn-success">Cadastrar
+                                                    </button>
+                                                    <button onClick={() => navigate('/')} type="button" className="btn btn-danger">
+                                                        Cancelar
+                                                    </button>
+                                                </fieldset>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
-                        </div>
+                            </div>
+                        </Card>
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default CadastroUsuario;

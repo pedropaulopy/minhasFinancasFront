@@ -1,6 +1,10 @@
 import Rotas from "./rotas";
 import Navbar from "../components/navbar";
 import React from 'react'
+
+import 'toastr/build/toastr.min.css'
+
+import 'toastr/build/toastr.css'
 import '../minhas-financas-template/html/Bootswatch_ Flatly_files/bootstrap.css'
 import '../custom.css'
 import {BrowserRouter} from "react-router";

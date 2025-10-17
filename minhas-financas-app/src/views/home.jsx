@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import {useNavigate} from "react-router";
+import UsuarioService from "../app/services/usuarioService";
+
+const service = new UsuarioService();
 
 const Home = () => {
     const [saldo, setSaldo] = useState(0);
@@ -8,14 +10,8 @@ const Home = () => {
 
     useEffect(() => {
         const usuarioLogadoString = localStorage.getItem('_usuario_logado')
-        if (!usuarioLogadoString) {
-            // If not, redirect to login and stop the effect
-            console.error("Usuário não logado. Redirecionando...");
-            navigate('/login'); // <-- Ajuste para sua rota de login
-            return;
-        }
         const usuarioLogadoParse = JSON.parse(usuarioLogadoString)
-        axios.get(`http://localhost:8081/api/usuarios/saldo/${usuarioLogadoParse.id}`)
+        service.obterSaldoUsuarioPorId(usuarioLogadoParse.id)
             .then(response => {
                 setSaldo(response.data)
 

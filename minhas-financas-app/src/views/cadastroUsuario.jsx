@@ -1,10 +1,9 @@
 import React, { useState } from 'react'; // Importa o useState
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import { Link } from "react-router-dom"; // Corrigido de 'react-router' para 'react-router-dom'
 import axios from "axios";
 
-import { mensagemErro, mensagemSucesso } from '../components/toastr';
+import { mensagemErro, mensagemSucesso, mensagemAviso } from '../components/toastr';
 import {useNavigate} from "react-router";
 
 function CadastroUsuario() {
@@ -16,7 +15,36 @@ function CadastroUsuario() {
     const [senhaRepetida, setSenhaRepetida] = useState('');
     const navigate = useNavigate();
 
+    const validar = () => {
+        const msgs = []
+        if(!nome){
+            msgs.push("O campo nome é obrigatório.")
+        }
+
+        if(!email){
+            msgs.push("O campo email é obrigatório.")
+        }else if(!email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)){
+            msgs.push("Informe um email válido.")
+        }
+
+        if(!senha || !senhaRepetida){
+            msgs.push("Digite a senha 2x")
+        }else if(senha !== senhaRepetida){
+            msgs.push("As senhas não são iguais.")
+        }
+
+        return msgs;
+    }
+
     const cadastrar = () => {
+        const msgs = validar();
+        if(msgs && msgs.length > 0){
+            msgs.forEach((msg) => {
+                mensagemAviso("Atenção!", msg)
+            })
+            return false;
+        }
+
         axios.post("http://localhost:8081/api/usuarios", {
             email: email,
             nome: nome,

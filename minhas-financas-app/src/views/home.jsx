@@ -1,15 +1,24 @@
 import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import {useNavigate} from "react-router";
 
 const Home = () => {
     const [saldo, setSaldo] = useState(0);
     const navigate = useNavigate();
+
     useEffect(() => {
-        axios.get('http://localhost:8081/api/usuarios/saldo/12')
+        const usuarioLogadoString = localStorage.getItem('_usuario_logado')
+        if (!usuarioLogadoString) {
+            // If not, redirect to login and stop the effect
+            console.error("Usuário não logado. Redirecionando...");
+            navigate('/login'); // <-- Ajuste para sua rota de login
+            return;
+        }
+        const usuarioLogadoParse = JSON.parse(usuarioLogadoString)
+        axios.get(`http://localhost:8081/api/usuarios/saldo/${usuarioLogadoParse.id}`)
             .then(response => {
                 setSaldo(response.data)
+
             }).catch(error => {
                 console.error(error.data)}
         )
@@ -25,10 +34,16 @@ const Home = () => {
                 <button onClick={() => navigate('/cadastro-usuarios')} className={"btn btn-primary"} type="button">
                     Cadastrar Usuario
                 </button>
-                <a href={"https://bootswatch.com/flatly/#"} role={"button"} className={"btn btn-danger"} style={{ marginLeft: '5px' }}>
+                <button
+                    // Assumindo que esta é a sua rota interna:
+                    onClick={() => navigate('/')}
+                    className={"btn btn-danger"}
+                    style={{ marginLeft: '5px' }}
+                    type="button"
+                >
                     <i className={"fa fa-users"}></i>
                     Cadastrar Lançamento
-                </a>
+                </button>
             </p>
         </div>
     );

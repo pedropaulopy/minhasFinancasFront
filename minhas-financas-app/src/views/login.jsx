@@ -16,6 +16,7 @@ const Login = () => {
             email: email,
             senha: senha
         }).then(response => {
+            localStorage.setItem('_usuario_logado', JSON.stringify(response.data))
             navigate("/");
         }).catch(erro => {
             let msg = 'Erro desconhecido. Tente novamente.';

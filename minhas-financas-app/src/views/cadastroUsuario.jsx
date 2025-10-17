@@ -2,6 +2,7 @@ import React from 'react'
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import {Link} from "react-router"
+import axios from "axios";
 class CadastroUsuario extends React.Component{
 
 
@@ -13,14 +14,16 @@ class CadastroUsuario extends React.Component{
     }
 
     cadastrar = () => {
-        console.log("Nome: ", this.state.nome);
-        console.log("Email: ", this.state.email);
-        console.log("Senha: ", this.state.senha);
+        axios.post("http://localhost:8081/api/usuarios", {
+            email: this.state.email,
+            nome: this.state.nome,
+            senha: this.state.senhaRepetida
+        }).then(response => (
+            console.log(response)
+        )).catch(erro => (
+            console.log(erro.response)
+        ))
     };
-
-    prepareLogin = () => {
-
-    }
 
     render() {
         const senhasIguais = this.state.senha === this.state.senhaRepetida;

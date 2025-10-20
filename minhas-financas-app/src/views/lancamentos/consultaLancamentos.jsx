@@ -48,9 +48,14 @@ function ConsultaLancamentos(){
     }
 
     const deletar = (lancamento) => {
-        service.deletar(lancamento.id)
-            .then(mensagemSucesso("Sucesso!", "Lançamento deletado"))
-            .catch(mensagemErro("Erro", "Ocorreu algum erro ao tentar deletar o lançamento."))
+        service.deletar(lancamento.id).then(response => {
+            const novosLancamentos = lancamentos.filter(l => l.id !== lancamento.id);
+            setLancamentos(novosLancamentos);
+            mensagemSucesso("Sucesso!", "Lançamento deletado com sucesso");
+        }).catch(error => {
+            mensagemErro("Erro", "Ocorreu um erro ao tentar deletar o lançamento.");
+            console.error(error);
+        });
     }
 
     return(

@@ -1,28 +1,57 @@
-import React from "react";
-import Card from "../components/card";
-import FormGroup from "../components/form-group";
-import SelectMenu from "../components/selectMenu";
+import React, {useState} from "react";
+import Card from "../../components/card";
+import FormGroup from "../../components/form-group";
+import SelectMenu from "../../components/selectMenu";
+import LancamentosTable from "./lancamentosTable";
+import LancamentoService from "../../app/services/lancamentoService"
+import {mensagemErro, mensagemSucesso} from '../../components/toastr'
+
 
 function ConsultaLancamentos(){
-    const listaMeses = [
-        {label:'Janeiro', value:1},
-        {label:'Fevereiro', value:2},
-        {label:'Março', value:3},
-        {label:'Abril', value:4},
-        {label:'Maio', value:5},
-        {label:'Junho', value:6},
-        {label:'Julho', value:7},
-        {label:'Agosto', value:8},
-        {label:'Setembro', value:9},
-        {label:'Outubro', value:10},
-        {label:'Novembro', value:11},
-        {label:'Dezembro', value:12}
-    ]
+    const [ano, setAno] = useState();
+    const [mes, setMes] = useState();
+    const [tipo, setTipo] = useState();
+    const [descricao, setDescricao] = useState();
+    const [lancamentos, setLancamentos] = useState([]);
+    const service = new LancamentoService();
 
-    const listaTipos = [
-        {label:'Receita', value:'RECEITA'},
-        {label:'Despesa', value:'DESPESA'}
-    ]
+    const listaMeses = service.obterListaMeses()
+    const listaTipos = service.obterListaTipos()
+
+    const buscar = () => {
+        const lancamentoFiltro = {
+            ano: ano,
+            descricao: descricao,
+            mes: mes,
+            tipo: tipo
+        }
+
+        service.consultar(lancamentoFiltro).then(response => {
+            const lista = response.data
+            if(!ano){
+                mensagemErro("Erro", "Informe ao menos o ano.")
+                return
+            }
+            if(lista.length===0){
+                mensagemErro("Erro", "Nenhum lançamento encontrado para os parâmetros passados.")
+                return
+            }
+            console.log(response.data)
+            setLancamentos(response.data)
+        }).catch(error => {
+            console.error("Erro", error.response)
+        })
+    }
+
+    const editar = (id) => {
+        service.put(id)
+    }
+
+    const deletar = (lancamento) => {
+        service.deletar(lancamento.id)
+            .then(mensagemSucesso("Sucesso!", "Lançamento deletado"))
+            .catch(mensagemErro("Erro", "Ocorreu algum erro ao tentar deletar o lançamento."))
+    }
 
     return(
         <Card title={"Consulta Lançamentos"}>
@@ -33,21 +62,42 @@ function ConsultaLancamentos(){
                             <input type={"text"} className={"form-control"}
                                    id={"inputAno"}
                                    aria-describedby={"emailHelp"}
-                                   placeholder={"Digite o Ano"}/>
+                                   placeholder={"Digite o Ano"}
+                                   value={ano}
+                                   onChange={(e) => setAno(e.target.value)}
+                            />
+                        </FormGroup>
+                        <FormGroup Label={"Descrição: "}>
+                            <input type={"text"} className={"form-control"}
+                                   id={"inputDesc"}
+                                   placeholder={"Descrição"}
+                                   value={descricao}
+                                   onChange={(e) => setDescricao(e.target.value)}
+                            />
                         </FormGroup>
                         <FormGroup htmlFor="InputMes" Label={"Mês: "}>
-                            <SelectMenu className={"form-control"} Lista={listaMeses} />
+                            <SelectMenu className={"form-control"}
+                                        value={mes}
+                                        onChange={(e) => setMes(e.target.value)}
+                                        Lista={listaMeses} />
                         </FormGroup>
                         <FormGroup htmlFor="InputTipo" Label={"Tipo de Lançamento: "}>
-                            <SelectMenu className={"form-control"} Lista={listaTipos} />
+                            <SelectMenu className={"form-control"}
+                                        Lista={listaTipos}
+                                        value={tipo}
+                                        onChange={(e) => setTipo(e.target.value)}
+                            />
                         </FormGroup>
-                        <button type={"button"} className={"btn btn-success"}>Buscar</button>
-                        <button type={"button"} className={"btn btn-danger"}>Cadastrar</button>
+                        <button type={"button"} className={"btn btn-success"} onClick={buscar}>Buscar</button>
+                        <button type={"button"} className={"btn btn-danger"} >Cadastrar</button>
                     </div>
                 </div>
-                <div className={"row"}>
-                    <div className={"col-md-12"}>
-
+            </div>
+            <br/>
+            <div className={"row"}>
+                <div className={"col-md-12"}>
+                    <div className={"bs-component"}>
+                        <LancamentosTable Lancamentos={lancamentos} deleteAction={deletar} editAction={editar}/>
                     </div>
                 </div>
             </div>

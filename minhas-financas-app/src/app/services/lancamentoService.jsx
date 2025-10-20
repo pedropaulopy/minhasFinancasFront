@@ -31,6 +31,14 @@ export default class LancamentoService extends ApiService{
         ]
     }
 
+    obterListaStatus(){
+        return [
+            {label: 'Selecione...', value: null},
+            {label: 'Efetivado', value: 'EFETIVADO'},
+            {label: 'Pendente', value: 'PENDENTE'}
+        ]
+    }
+
     consultar(LancamentoFiltro){
         const usuarioLogado = JSON.parse(localStorage.getItem('_usuario_logado'));
 
@@ -58,6 +66,10 @@ export default class LancamentoService extends ApiService{
         }
 
         return this.get(`/buscar${params}`)
+    }
+
+    cadastrarLancamento(lancamento) {
+        return this.post('/salvar', lancamento);
     }
 
     deletar(id){

@@ -7,6 +7,7 @@ import LancamentoService from "../../app/services/lancamentoService"
 import {mensagemErro, mensagemSucesso} from '../../components/toastr'
 import {Dialog} from 'primereact/dialog'
 import {Button} from "primereact/button";
+import {useNavigate} from "react-router";
 
 function ConsultaLancamentos(){
     const [ano, setAno] = useState();
@@ -18,6 +19,7 @@ function ConsultaLancamentos(){
     const [lancamentoDeletar, setLancamentoDeletar] = useState({});
     const service = new LancamentoService();
 
+    const navigate = useNavigate();
 
     const listaMeses = service.obterListaMeses()
     const listaTipos = service.obterListaTipos()
@@ -73,6 +75,10 @@ function ConsultaLancamentos(){
         setLancamentoDeletar({})
     }
 
+    const prepareCadastrarLancamento = () => {
+        navigate('/cadastro-lancamentos')
+    }
+
     const confirmDialogFooter = (
         <div>
             <Button label={"Confirmar"} icon={"pi pi-check"} onClick={deletar}/>
@@ -116,7 +122,7 @@ function ConsultaLancamentos(){
                             />
                         </FormGroup>
                         <button type={"button"} className={"btn btn-success"} onClick={buscar}>Buscar</button>
-                        <button type={"button"} className={"btn btn-danger"}>Cadastrar</button>
+                        <button type={"button"} className={"btn btn-danger"} onClick={prepareCadastrarLancamento}>Cadastrar</button>
                     </div>
                 </div>
             </div>

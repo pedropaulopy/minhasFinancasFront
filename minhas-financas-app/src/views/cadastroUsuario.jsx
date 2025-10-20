@@ -122,7 +122,7 @@ function CadastroUsuario() {
                                                     </FormGroup>
 
                                                     <button disabled={!senhasIguais}
-                                                            onClick={cadastrar} // Chama a função sem o 'this'
+                                                            onClick={cadastrar}
                                                             type="button" className="btn btn-success">Cadastrar
                                                     </button>
                                                     <button onClick={() => navigate('/')} type="button" className="btn btn-danger">

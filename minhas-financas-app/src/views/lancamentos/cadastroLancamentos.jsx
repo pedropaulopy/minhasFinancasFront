@@ -56,10 +56,9 @@ function CadastroLancamentos(){
                         navigate('/consulta-lancamentos');
                     })
                     .catch(erro => {
-                        console.error("Erro ao ATUALIZAR (detalhe):", erro.response.data);
+                        console.error("Erro ao ATUALIZAR:", erro.response.data);
                         const mensagemBackend = erro.response.data.message || erro.response.data;
 
-                        // 3. Mostre a mensagem real no toastr
                         mensagemErro("Erro ao Atualizar", mensagemBackend);
                         mensagemErro("Erro", erro.response.data);
                     });
@@ -73,7 +72,6 @@ function CadastroLancamentos(){
                         console.error("Erro ao ATUALIZAR (detalhe):", erro.response.data);
                         const mensagemBackend = erro.response.data.message || erro.response.data;
 
-                        // 3. Mostre a mensagem real no toastr
                         mensagemErro("Erro ao Atualizar", mensagemBackend);
                         mensagemErro("Erro", erro.response.data);
                     });

@@ -15,6 +15,7 @@ function Rotas(){
                     <Route path={"/"} element={<Login/>}  />
                     <Route path={"/cadastro-usuarios"} element={<CadastroUsuario/>}  />
                     <Route path={"/consulta-lancamentos"} element={<ConsultaLancamentos/>} />
+                    <Route path={"/cadastro-lancamentos/"} element={<CadastroLancamentos/>} />
                     <Route path={"/cadastro-lancamentos/:id"} element={<CadastroLancamentos/>} />
                 </Routes>
             </>

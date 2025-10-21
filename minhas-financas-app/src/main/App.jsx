@@ -7,6 +7,8 @@ import 'primereact/resources/primereact.min.css'
 import 'toastr/build/toastr.css'
 import '../minhas-financas-template/html/Bootswatch_ Flatly_files/bootstrap.css'
 import '../custom.css'
+import 'primeicons/primeicons.css';
+
 import {BrowserRouter} from "react-router";
 class App extends React.Component {
       render(){

@@ -11,10 +11,10 @@ function LancamentosTable(props){
                 <td>{lancamento.tipoLancamento}</td>
                 <td>{lancamento.statusLancamento}</td>
                 <td>
-                    <button type={"button"} className={"btn btn-success"} onClick={e => props.alterarStatus(lancamento, "EFETIVADO")}>Efetivar</button>
-                    <button type={"button"} className={"btn btn-warning"} onClick={e => props.alterarStatus(lancamento, "CANCELADO")}>Cancelar</button>
-                    <button type={"button"} className={"btn btn-primary"} onClick={e => props.editAction(lancamento)}>Editar</button>
-                    <button type={"button"} className={"btn btn-danger"} onClick={e => props.deleteAction(lancamento)}>Deletar</button>
+                    <button title={"Efetivar"} disabled={lancamento.statusLancamento !== "PENDENTE"} type={"button"} className={"btn btn-success"} onClick={e => props.alterarStatus(lancamento, "EFETIVADO")} ><i className={"pi pi-check"}></i></button>
+                    <button title={"Cancelar"} disabled={lancamento.statusLancamento !== "PENDENTE"} type={"button"} className={"btn btn-warning"} onClick={e => props.alterarStatus(lancamento, "CANCELADO")}><i className={"pi pi-ban"}></i></button>
+                    <button title={"Editar"} type={"button"} className={"btn btn-primary"} onClick={e => props.editAction(lancamento)}><i className={"pi pi-pencil"}></i></button>
+                    <button title={"Deletar"} type={"button"} className={"btn btn-danger"} onClick={e => props.deleteAction(lancamento)}><i className={"pi pi-trash"}></i></button>
                 </td>
             </tr>
         )

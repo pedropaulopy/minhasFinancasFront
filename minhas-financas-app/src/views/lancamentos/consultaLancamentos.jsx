@@ -144,8 +144,8 @@ function ConsultaLancamentos(){
                                         onChange={(e) => setTipo(e.target.value)}
                             />
                         </FormGroup>
-                        <button type={"button"} className={"btn btn-success"} onClick={buscar}>Buscar</button>
-                        <button type={"button"} className={"btn btn-danger"} onClick={prepareCadastrarLancamento}>Cadastrar</button>
+                        <button  title={"Buscar"} type={"button"} className={"btn btn-success"} onClick={buscar}><i className={"pi pi-search"}></i></button>
+                        <button title={"Cadastrar lançamento"} type={"button"} className={"btn btn-danger"} onClick={prepareCadastrarLancamento}><i className={"pi pi-file-plus"}></i></button>
                     </div>
                 </div>
             </div>

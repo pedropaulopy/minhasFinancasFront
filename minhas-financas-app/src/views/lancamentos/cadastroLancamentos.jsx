@@ -154,11 +154,11 @@ function CadastroLancamentos(){
                 </div>
             </div>
 
-            <button onClick={cadastrarLancamento} type="button" className="btn btn-success">
-                {id ? "Atualizar" : "Salvar"}
+            <button  onClick={cadastrarLancamento} type="button" className="btn btn-success">
+                {id ? <i title={"Atualizar"} className={"pi pi-check"}></i> : <i title={"Cadastrar"} className={"pi pi-check"}></i>}
             </button>
-            <Link to={"/consulta-lancamentos"} className="btn btn-danger">
-                Cancelar
+            <Link title={"Cancelar"} to={"/consulta-lancamentos"} className="btn btn-danger">
+                <i className={"pi pi-times"}></i>
             </Link>
         </Card>
     )

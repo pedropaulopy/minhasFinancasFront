@@ -31,7 +31,6 @@ const Home = () => {
                     Cadastrar Usuario
                 </button>
                 <button
-                    // Assumindo que esta é a sua rota interna:
                     onClick={() => navigate('/')}
                     className={"btn btn-danger"}
                     style={{ marginLeft: '5px' }}

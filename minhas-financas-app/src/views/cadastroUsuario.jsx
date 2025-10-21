@@ -111,10 +111,11 @@ function CadastroUsuario() {
 
                                                     <button disabled={!senhasIguais}
                                                             onClick={cadastrar}
-                                                            type="button" className="btn btn-success">Cadastrar
+                                                            type="button" className="btn btn-success">
+                                                        <i className={"pi pi-check"}></i> Cadastrar
                                                     </button>
                                                     <button onClick={() => navigate('/')} type="button" className="btn btn-danger">
-                                                        Cancelar
+                                                        <i className={"pi pi-times"}></i> Cancelar
                                                     </button>
                                                 </fieldset>
                                             </form>

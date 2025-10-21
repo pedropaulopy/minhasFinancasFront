@@ -71,10 +71,10 @@ const Login = () => {
                                                         />
                                                     </FormGroup>
                                                     <button onClick={entrar} type="button" className="btn btn-success">
-                                                        Entrar
+                                                        <i className={"pi pi-sign-in"}></i> Entrar
                                                     </button>
                                                     <Link to={"/cadastro-usuarios"} className="btn btn-danger">
-                                                        Cadastrar
+                                                        <i className={"pi pi-user-plus"}></i> Cadastrar Usuario
                                                     </Link>
                                                 </fieldset>
                                             </form>

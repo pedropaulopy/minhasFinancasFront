@@ -28,16 +28,15 @@ const Home = () => {
             <hr className={"my-4"} />
             <p className={"lead"}>
                 <button onClick={() => navigate('/cadastro-usuarios')} className={"btn btn-primary"} type="button">
-                    Cadastrar Usuario
+                    <i className={"pi pi-user-plus"}></i> Cadastrar Usuário
                 </button>
                 <button
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/cadastro-lancamentos')}
                     className={"btn btn-danger"}
                     style={{ marginLeft: '5px' }}
                     type="button"
                 >
-                    <i className={"fa fa-users"}></i>
-                    Cadastrar Lançamento
+                    <i className={"pi pi-file-plus"}></i> Cadastrar Lançamento
                 </button>
             </p>
         </div>

@@ -2,62 +2,53 @@ import React, { useState } from 'react'; // Importa o useState
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import axios from "axios";
-
-import { mensagemErro, mensagemSucesso, mensagemAviso } from '../components/toastr';
+import usuarioService from "../app/services/usuarioService";
+import { mensagemErro, mensagemSucesso} from '../components/toastr';
 import {useNavigate} from "react-router";
 
 function CadastroUsuario() {
 
-    // Substitui o this.state por hooks useState individuais
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [senhaRepetida, setSenhaRepetida] = useState('');
     const navigate = useNavigate();
-
-    const validar = () => {
-        const msgs = []
-        if(!nome){
-            msgs.push("O campo nome é obrigatório.")
-        }
-
-        if(!email){
-            msgs.push("O campo email é obrigatório.")
-        }else if(!email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)){
-            msgs.push("Informe um email válido.")
-        }
-
-        if(!senha || !senhaRepetida){
-            msgs.push("Digite a senha 2x")
-        }else if(senha !== senhaRepetida){
-            msgs.push("As senhas não são iguais.")
-        }
-
-        return msgs;
-    }
+    const service = new usuarioService()
 
     const cadastrar = () => {
-        const msgs = validar();
-        if(msgs && msgs.length > 0){
-            msgs.forEach((msg) => {
-                mensagemAviso("Atenção!", msg)
-            })
-            return false;
+        const usuario = { nome, email, senha, senhaRepetida };
+        try {
+            service.validar(usuario);
+        } catch(erro) {
+            const msgs = erro.mensagens;
+            if (msgs && msgs.forEach) {
+                msgs.forEach(msg => mensagemErro("Erro de validação",msg));
+            } else {
+                mensagemErro("Erro de validação: " + erro.message);
+            }
+            return;
         }
-
         axios.post("http://localhost:8081/api/usuarios", {
             email: email,
             nome: nome,
-            senha: senhaRepetida
+            senha: senha
         }).then(response => {
             mensagemSucesso("Sucesso", "Usuário cadastrado com sucesso!");
             navigate("/home");
         }).catch(erro => {
-            mensagemErro("Erro", erro.response.data);
+            const msgs = erro.response ? erro.response.data : null;
+
+            if (Array.isArray(msgs)) {
+                msgs.forEach(msg => mensagemErro(msg));
+            } else if (typeof msgs === 'string') {
+                mensagemErro(msgs);
+            } else {
+                mensagemErro("Ocorreu um erro no servidor. Tente novamente.");
+            }
+            return false;
         });
     };
 
-    // Calcula a variável diretamente
     const senhasIguais = senha === senhaRepetida;
 
     return (
@@ -74,18 +65,17 @@ function CadastroUsuario() {
                                                 <fieldset>
                                                     <FormGroup Label={"Nome: *"} htmlFor={"inputNome"}>
                                                         <input type={"text"}
-                                                               value={nome} // Usa a variável de estado
-                                                               onChange={e => setNome(e.target.value)} // Usa a função setter
+                                                               value={nome}
+                                                               onChange={e => setNome(e.target.value)}
                                                                className={"form-control"}
                                                                id={"inputNome"}
                                                                placeholder={"Digite o Nome"} />
-                                                        {/* Placeholder corrigido de 'Email' para 'Nome' */}
                                                     </FormGroup>
 
                                                     <FormGroup Label={"Email: *"} htmlFor={"exampleInputEmail"}>
                                                         <input type={"email"}
-                                                               value={email} // Usa a variável de estado
-                                                               onChange={e => setEmail(e.target.value)} // Usa a função setter
+                                                               value={email}
+                                                               onChange={e => setEmail(e.target.value)}
                                                                className={"form-control"}
                                                                id={"exampleInputEmail"}
                                                                aria-describedby={"emailHelp"}
@@ -95,7 +85,7 @@ function CadastroUsuario() {
                                                     <FormGroup Label={"Senha: *"} htmlFor={"exampleInputPassword1"}>
                                                         <input type={"password"}
                                                                value={senha} // Usa a variável de estado
-                                                               onChange={e => setSenha(e.target.value)} // Usa a função setter
+                                                               onChange={e => setSenha(e.target.value)}
                                                                className={"form-control"}
                                                                id={"exampleInputPassword1"}
                                                                aria-describedby={"passwordHelp"}
@@ -104,16 +94,14 @@ function CadastroUsuario() {
                                                     </FormGroup>
 
                                                     <FormGroup Label={"Repita a senha: *"} htmlFor={"exampleInputPassword2"}>
-                                                        {/* ID corrigido para ser único */}
                                                         <input type={"password"}
-                                                               value={senhaRepetida} // Usa a variável de estado
-                                                               onChange={e => setSenhaRepetida(e.target.value)} // Usa a função setter
+                                                               value={senhaRepetida}
+                                                               onChange={e => setSenhaRepetida(e.target.value)}
                                                                className={"form-control"}
                                                                id={"exampleInputPassword2"}
                                                                aria-describedby={"passwordHelp"}
                                                                placeholder={"Repita a Senha"}
                                                         />
-                                                        {/* Condicional usa as variáveis de estado */}
                                                         {senha && senhaRepetida && senha !== senhaRepetida && (
                                                             <small style={{ color: 'red' }}>
                                                                 As senhas não coincidem.

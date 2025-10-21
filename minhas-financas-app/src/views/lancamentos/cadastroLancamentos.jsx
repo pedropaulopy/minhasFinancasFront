@@ -48,36 +48,37 @@ function CadastroLancamentos(){
         };
 
         try {
-            if(params.id){
+            service.validar(lancamento)
+        } catch(erro) {
+            const mensagens = erro.mensagens;
+            mensagens.forEach(msg => mensagemErro("Erro de Validação", msg));
+            return false;
+        }
 
-                service.atualizarLancamento(params.id, lancamento)
-                    .then(response => {
-                        mensagemSucesso("Sucesso!", "Lançamento atualizado com sucesso.");
-                        navigate('/consulta-lancamentos');
-                    })
-                    .catch(erro => {
-                        console.error("Erro ao ATUALIZAR:", erro.response.data);
-                        const mensagemBackend = erro.response.data.message || erro.response.data;
-
-                        mensagemErro("Erro ao Atualizar", mensagemBackend);
-                        mensagemErro("Erro", erro.response.data);
-                    });
-            } else {
-                service.cadastrarLancamento(lancamento)
-                    .then(response => {
-                        mensagemSucesso("Sucesso!", "Lançamento cadastrado com sucesso.");
-                        navigate('/consulta-lancamentos');
-                    })
-                    .catch(erro => {
-                        console.error("Erro ao ATUALIZAR (detalhe):", erro.response.data);
-                        const mensagemBackend = erro.response.data.message || erro.response.data;
-
-                        mensagemErro("Erro ao Atualizar", mensagemBackend);
-                        mensagemErro("Erro", erro.response.data);
-                    });
-            }
-        } catch (erro) {
-            mensagemErro("Erro", erro.message);
+        if(params.id){
+            service.atualizarLancamento(params.id, lancamento)
+                .then(response => {
+                    mensagemSucesso("Sucesso!", "Lançamento atualizado com sucesso.");
+                    navigate('/consulta-lancamentos');
+                })
+                .catch(erro => {
+                    const msgErro = erro.response ? erro.response.data : "Ocorreu um erro ao atualizar o lançamento.";
+                    mensagemErro("Erro", msgErro);
+                });
+        } else {
+            service.cadastrarLancamento(lancamento)
+                .then(response => {
+                    mensagemSucesso("Sucesso!", "Lançamento cadastrado com sucesso.");
+                    navigate('/consulta-lancamentos');
+                })
+                .catch(erro => {
+                    const msgsErro = erro.response ? erro.response.data : ["Ocorreu um erro ao cadastrar o lançamento."];
+                    if (Array.isArray(msgsErro)) {
+                        msgsErro.forEach(msg => mensagemErro("Erro", msg));
+                    } else {
+                        mensagemErro("Erro", msgsErro);
+                    }
+                });
         }
     }
 

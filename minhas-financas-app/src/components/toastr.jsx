@@ -1,3 +1,4 @@
+import 'toastr/build/toastr.min.css'
 import toastr from 'toastr'
 
     toastr.options = {

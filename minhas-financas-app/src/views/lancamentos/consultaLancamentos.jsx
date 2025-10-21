@@ -83,6 +83,24 @@ function ConsultaLancamentos(){
         navigate('/cadastro-lancamentos')
     }
 
+    const alterarStatus = (lancamento, statusLancamento) => {
+        service.alterarStatus(lancamento.id, statusLancamento)
+            .then(response => {
+                const novosLancamentos = lancamentos.map(l => {
+                    if (l.id === lancamento.id) {
+                        return { ...l, statusLancamento: statusLancamento };
+                    }
+                    return l;
+                });
+
+                setLancamentos(novosLancamentos);
+                mensagemSucesso("Sucesso!", "Status atualizado com sucesso.");
+            })
+            .catch(error => {
+                mensagemErro("Erro", "Ocorreu um erro ao tentar atualizar o status.");
+                console.error(error);
+            });
+    }
 
     const confirmDialogFooter = (
         <div>
@@ -135,7 +153,7 @@ function ConsultaLancamentos(){
             <div className={"row"}>
                 <div className={"col-md-12"}>
                     <div className={"bs-component"}>
-                        <LancamentosTable Lancamentos={lancamentos} deleteAction={abrirConfirmacao} editAction={editar}/>
+                        <LancamentosTable Lancamentos={lancamentos} deleteAction={abrirConfirmacao} editAction={editar} alterarStatus={alterarStatus}/>
                     </div>
                 </div>
             </div>

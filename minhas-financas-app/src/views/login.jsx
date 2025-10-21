@@ -25,7 +25,13 @@ const Login = () => {
             mensagemSucesso("Credenciais corretas", "Usuario logado com sucesso!")
             navigate("/home");
         }).catch(erro => {
-            mensagemErro("Erro", erro.response.data);
+            if (erro.response && erro.response.data) {
+                mensagemErro("Erro", erro.response.data);
+            } else {
+                // Erro de rede ou outro erro (ex: servidor offline)
+                const msg = erro.message || "Não foi possível conectar ao servidor. Tente novamente.";
+                mensagemErro("Erro", msg);
+            }
         });
     };
 

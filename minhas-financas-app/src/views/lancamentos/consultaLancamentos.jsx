@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import Card from "../../components/card";
 import FormGroup from "../../components/form-group";
 import SelectMenu from "../../components/selectMenu";
@@ -17,7 +17,10 @@ function ConsultaLancamentos(){
     const [showConfirmDialog, setShowConfirmDialog] = useState();
     const [lancamentos, setLancamentos] = useState([]);
     const [lancamentoDeletar, setLancamentoDeletar] = useState({});
-    const service = new LancamentoService();
+
+    const service = useMemo(() => {
+        return new LancamentoService();
+    }, []);
 
     const navigate = useNavigate();
 
@@ -49,8 +52,9 @@ function ConsultaLancamentos(){
         })
     }
 
-    const editar = (id) => {
-        service.put(id)
+    const editar = (lancamento) => {
+        service.obterPorId(lancamento.id)
+        navigate(`/cadastro-lancamentos/${lancamento.id}`)
     }
 
     const deletar = () => {
@@ -78,6 +82,7 @@ function ConsultaLancamentos(){
     const prepareCadastrarLancamento = () => {
         navigate('/cadastro-lancamentos')
     }
+
 
     const confirmDialogFooter = (
         <div>

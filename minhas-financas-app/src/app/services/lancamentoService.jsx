@@ -1,4 +1,4 @@
-import ApiService from "../apiService";
+import ApiService from "./apiService";
 import ErroValidacao from "../exception/ErroValidacao"
 
 export default class LancamentoService extends ApiService{

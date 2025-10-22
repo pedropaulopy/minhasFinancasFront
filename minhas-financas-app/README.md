@@ -1,70 +1,142 @@
-# Getting Started with Create React App
+# Minhas Finanças (Frontend)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto implementa o **frontend do sistema de controle financeiro**, uma interface de usuário moderna construída como uma *Single Page Application* (SPA).
+Foi desenvolvido em **React**, utilizando Hooks, Context API e consumindo o backend RESTful do projeto Minhas Finanças.
 
-## Available Scripts
+-----
 
-In the project directory, you can run:
+## Tecnologias Utilizadas
 
-### `npm start`
+- **React - `v19.2.0`** (com Hooks, `useState`, `useEffect`)
+- **React Router** (para roteamento de páginas)
+- **Axios - `v1.12.2`** (para realizar chamadas à API REST)
+- **PrimeReact** (para componentes de UI como `Dialog` e `Button`)
+- **PrimeIcons** (para iconografia)
+- **Toastr - `v2.1.4`** (para notificações e alertas)
+- **Bootswatch (Flatly)** (como tema base CSS/Bootstrap)
+- **`currency-formatter`** (para formatação de valores monetários)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+-----
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Estrutura do Projeto
 
-### `npm test`
+```
+src/
+├── app/
+│   ├── services/
+│   │   ├── apiService.js
+│   │   ├── authService.js
+│   │   ├── lancamentoService.js
+│   │   ├── localStorageService.js
+│   │   ├── provedorAutenticacao.js
+│   │   └── usuarioService.js
+│   └── exception/
+│       └── ErroValidacao.js
+│
+├── components/
+│   │   ├── card.jsx
+│   │   ├── form-group.jsx
+│   │   ├── navbar.jsx
+│   │   ├── rotaAutenticada.jsx
+│   │   ├── selectMenu.jsx
+│   └── |── toastr.jsx
+│
+├── views/
+│   │   ├── home.jsx
+│   │   ├── login.jsx
+│   │   ├── cadastroUsuario.jsx
+│   │   └── lancamentos/
+│   │       ├── cadastroLancamentos.jsx
+│   │       ├── consultaLancamentos.jsx
+│   │       └── lancamentosTable.jsx
+│
+├── main/
+│   ├── App.jsx
+│   └── rotas.jsx
+│
+├── index.jsx
+└── custom.css
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-----
 
-### `npm run build`
+## Descrição dos Componentes/Camadas
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## **`index.jsx`**
+- `index.jsx`: Ponto de entrada da aplicação. Renderiza o componente `App` no elemento `root` do DOM.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### **`main/` (Configuração Central)**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Camada responsável pela inicialização e estrutura global da aplicação.
+- `App.jsx`: Componente principal que envolve toda a aplicação. É responsável por incluir os provedores globais (`AuthProvider`, `BrowserRouter`), a `Navbar` e importar todos os arquivos CSS globais (Bootstrap, Toastr, PrimeReact).
+- `rotas.jsx`: Define o mapeamento de todas as rotas (URLs) da aplicação para os seus respectivos componentes (Views), utilizando o `react-router`.
 
-### `npm run eject`
+### **`views/` (Páginas/Telas)**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Componentes React que representam uma tela completa do sistema, como `Login`, `Home` ou `ConsultaLancamentos`.
+Responsabilidades principais:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Orquestrar a exibição dos componentes de UI.
+- Gerenciar o estado da página (ex: dados de formulários, resultados de busca).
+- Invocar os serviços (`app/services/`) para buscar ou enviar dados.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### **`components/` (Componentes Reutilizáveis)**
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Componentes de UI genéricos, projetados para serem reutilizados em múltiplas `views`.
 
-## Learn More
+- Exemplos: `Card`, `FormGroup`, `SelectMenu`.
+- `navbar.jsx`: A barra de navegação superior, que exibe links diferentes dependendo se o usuário está autenticado (usando o `useAuth` hook).
+- `rotaAutenticada.jsx`: Um "Guarda de Rota". Verifica se o usuário está autenticado (`AuthService.isUsuarioAutenticado`). Se não estiver, redireciona o usuário para a tela de `/login`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### **`app/services/` (Serviços e Lógica de Negócio)**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Classes e módulos que centralizam a lógica de negócio e a comunicação com a API.
 
-### Code Splitting
+- `apiService.jsx`: Classe base que configura uma instância do `axios`. Define a `baseURL` da API (`http://localhost:8081`) e os métodos HTTP padrão (POST, PUT, DELETE, GET).
+- `usuarioService.jsx` / `lancamentoService.jsx`: Estendem o `ApiService` e implementam as regras de negócio específicas para suas entidades (ex: `autenticar`, `consultar`, `cadastrarLancamento`). Também contêm a lógica de validação dos dados de entrada.
+- `provedorAutenticacao.jsx`: Implementa um Provedor React (usando `AuthContext`) para gerenciar o estado de autenticação (`isAutenticado`) e as funções (`login`, `logout`) de forma global na aplicação.
+- `authService.jsx`: Serviço auxiliar que interage com o `localStorageService` para verificar se um usuário está autenticado, logar (salvar no storage) ou deslogar (remover do storage).
+- `localStorageService.jsx`: Uma classe estática utilitária que encapsula a interação com o `localStorage` do navegador, tratando a serialização (`JSON.stringify`) e desserialização (`JSON.parse`) dos dados.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### **`app/exception/` (Exceções Customizadas)**
 
-### Analyzing the Bundle Size
+- `ErroValidacao.jsx`: Uma classe de exceção customizada usada pelos serviços (ex: `lancamentoService.validar`) para agrupar mensagens de erro de validação de formulário.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### **`components/toaster/` (Notificações)**
 
-### Making a Progressive Web App
+- `toastr.jsx`: Funções que consomem a biblioteca toastr para gerar notificações dinâmicas (erro, aviso ou sucesso) baseadas nas ações do usuário.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+-----
 
-### Advanced Configuration
+## Conexão com o Backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Este projeto frontend foi desenvolvido para consumir a API do **Minhas Finanças Backend**.
 
-### Deployment
+- O `apiService.jsx` está configurado para fazer requisições para a URL base: `http://localhost:8081`.
+- Esta porta deve ser a mesma em que o backend Spring Boot está sendo executado, conforme definido no `application.properties` do backend (`server.port=8081`).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+-----
 
-### `npm run build` fails to minify
+## Build e Execução
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Requisitos
+
+- Node.js (**`v16+`**) e Yarn (**`1.22.22+`**) instalados.
+- O projeto **Minhas Finanças (Backend)** deve estar em execução no endereço `http://localhost:8081`.
+
+### Executar a aplicação
+
+1.  **Instalar dependências:**
+
+    ```bash
+    yarn install
+    ```
+
+2.  **Iniciar o servidor de desenvolvimento:**
+
+    ```bash
+    yarn start
+    ```
+
+A aplicação frontend ficará disponível em:
+`http://localhost:3000` (Porta padrão do Create React App)

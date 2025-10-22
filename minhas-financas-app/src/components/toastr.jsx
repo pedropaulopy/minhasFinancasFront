@@ -1,4 +1,4 @@
-import 'toastr/build/toastr.min.css'
+// import 'toastr/build/toastr.min.css'
 import toastr from 'toastr'
 
     toastr.options = {
@@ -24,7 +24,7 @@ export function mostrarMensagem(titulo, mensagem, tipo){
 }
 
 export function mensagemErro(titulo, mensagem){
-    mostrarMensagem(titulo, mensagem, 'error')
+    mostrarMensagem(titulo, mensagem, "error")
 }
 
 export function mensagemAviso(titulo, mensagem){

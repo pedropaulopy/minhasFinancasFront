@@ -4,7 +4,7 @@ import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import { Link } from "react-router";
 import usuarioService from "../app/services/usuarioService";
-import localStorageService from '../app/services/localStorageService'
+import { useAuth } from '../app/services/provedorAutenticacao';
 
 import {mensagemErro, mensagemSucesso} from '../components/toastr'
 
@@ -14,14 +14,14 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const navigate = useNavigate();
-
+    const { login } = useAuth();
 
     const entrar = () => {
         service.autenticar( {
             email: email,
             senha: senha
         }).then(response => {
-            localStorageService.adicionarItem('_usuario_logado', response.data)
+            login(response.data)
             mensagemSucesso("Credenciais corretas", "Usuario logado com sucesso!")
             navigate("/home");
         }).catch(erro => {

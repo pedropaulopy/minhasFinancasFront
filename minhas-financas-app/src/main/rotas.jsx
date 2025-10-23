@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router"; // Use 'react-router-dom'
 
-import AuthService from "../app/services/authService";
 import Login from "../views/login";
 import CadastroUsuario from "../views/cadastroUsuario";
 import Home from "../views/home";

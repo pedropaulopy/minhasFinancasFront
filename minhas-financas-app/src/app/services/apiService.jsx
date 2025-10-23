@@ -1,7 +1,10 @@
 import axios from "axios";
 
-const httpClient = axios.create({
-    baseURL: 'http://localhost:8081', withCredentials: true
+const baseURL = process.env.REACT_APP_API_URL
+
+export const httpClient = axios.create({
+    baseURL: baseURL,
+    withCredentials: true
 })
 
 class ApiService{

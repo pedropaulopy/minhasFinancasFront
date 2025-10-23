@@ -11,6 +11,7 @@ const Home = () => {
     useEffect(() => {
         const usuarioLogadoString = localStorage.getItem('_usuario_logado')
         const usuarioLogadoParse = JSON.parse(usuarioLogadoString)
+        console.log(usuarioLogadoParse.id)
         service.obterSaldoUsuarioPorId(usuarioLogadoParse.id)
             .then(response => {
                 setSaldo(response.data)
